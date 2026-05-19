@@ -1,0 +1,13 @@
+{
+  "name": "lessons-learned-local",
+  "owner": {
+    "name": "Open Edge"
+  },
+  "plugins": [
+    {
+      "name": "lessons-learned",
+      "source": "./plugins/lessons-learned",
+      "description": "Karpathy-LLM-Wiki-style knowledge base plugin for problem-solving lessons (software and beyond). Provides consulting/recording skills and /lesson-init, /lesson-add, /lesson-search, /lesson-lint commands."
+    }
+  ]
+}
