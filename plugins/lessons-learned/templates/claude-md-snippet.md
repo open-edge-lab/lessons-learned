@@ -7,7 +7,7 @@ non-trivial problem and update it after non-trivial resolutions.
 ## Lessons learned knowledge base
 
 This repo maintains a lessons-learned knowledge base at `{{KB_PATH}}/`, managed
-by the [`lessons-learned`](https://github.com/open-edge/lessons-learned) Claude
+by the [`lessons-learned`](https://github.com/open-edge-lab/lessons-learned) Claude
 Code plugin. The knowledge base captures problem-solving insights across any
 domain (software, hardware, process, decisions, research) — not just debugging.
 

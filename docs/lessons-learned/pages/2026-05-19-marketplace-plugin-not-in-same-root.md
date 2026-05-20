@@ -19,9 +19,9 @@ succeed but the plugin never actually loads:
 
 ```
 /plugin marketplace add D:\Projects\lessons-learned
-> Successfully added marketplace: lessons-learned-local
+> Successfully added marketplace: lessons-learned-oe
 
-/plugin install lessons-learned@lessons-learned-local
+/plugin install lessons-learned@lessons-learned-oe
 > (no content)
 
 /plugin list
@@ -88,9 +88,9 @@ Then in `marketplace.json`:
 Reinstall:
 
 ```
-/plugin marketplace remove lessons-learned-local
+/plugin marketplace remove lessons-learned-oe
 /plugin marketplace add D:\Projects\lessons-learned
-/plugin install lessons-learned@lessons-learned-local
+/plugin install lessons-learned@lessons-learned-oe
 /reload-plugins
 ```
 

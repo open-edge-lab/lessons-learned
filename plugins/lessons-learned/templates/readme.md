@@ -1,7 +1,7 @@
 # Lessons Learned
 
 This folder is a **problem-solving knowledge base** for this repo, maintained
-by the [lessons-learned](https://github.com/open-edge/lessons-learned) Claude
+by the [lessons-learned](https://github.com/open-edge-lab/lessons-learned) Claude
 Code plugin in the style of
 [Karpathy's LLM Wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f).
 

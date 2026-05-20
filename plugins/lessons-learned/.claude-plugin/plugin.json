@@ -1,8 +1,11 @@
 {
   "name": "lessons-learned",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Reusable Claude Code plugin to maintain a Karpathy-LLM-Wiki-style knowledge base of problem-solving lessons (software and beyond) in any repo.",
   "author": {
     "name": "Open Edge"
-  }
+  },
+  "homepage": "https://github.com/open-edge-lab/lessons-learned",
+  "repository": "https://github.com/open-edge-lab/lessons-learned",
+  "license": "MIT"
 }

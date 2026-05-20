@@ -1,13 +1,19 @@
 {
-  "name": "lessons-learned-local",
+  "name": "lessons-learned-oe",
   "owner": {
     "name": "Open Edge"
+  },
+  "metadata": {
+    "description": "Open Edge plugin marketplace — lessons-learned knowledge base tooling for Claude Code."
   },
   "plugins": [
     {
       "name": "lessons-learned",
       "source": "./plugins/lessons-learned",
-      "description": "Karpathy-LLM-Wiki-style knowledge base plugin for problem-solving lessons (software and beyond). Provides consulting/recording skills and /lesson-init, /lesson-add, /lesson-search, /lesson-lint commands."
+      "description": "Karpathy-LLM-Wiki-style knowledge base plugin for problem-solving lessons (software and beyond). Provides consulting/recording skills and /lesson-init, /lesson-add, /lesson-search, /lesson-lint commands.",
+      "homepage": "https://github.com/open-edge-lab/lessons-learned",
+      "repository": "https://github.com/open-edge-lab/lessons-learned",
+      "license": "MIT"
     }
   ]
 }

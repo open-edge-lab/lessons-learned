@@ -19,8 +19,8 @@ The plugin is domain-agnostic. Software is a first-class use case, but the same 
 Inside Claude Code, add this repo as a plugin marketplace and install the plugin:
 
 ```text
-/plugin marketplace add open-edge/lessons-learned
-/plugin install lessons-learned@lessons-learned-local
+/plugin marketplace add open-edge-lab/lessons-learned
+/plugin install lessons-learned@lessons-learned-oe
 /reload-plugins
 ```
 
@@ -28,7 +28,7 @@ If you prefer a local clone (useful for hacking on the plugin), point the market
 
 ```text
 /plugin marketplace add <path-to-cloned-repo>
-/plugin install lessons-learned@lessons-learned-local
+/plugin install lessons-learned@lessons-learned-oe
 /reload-plugins
 ```
 

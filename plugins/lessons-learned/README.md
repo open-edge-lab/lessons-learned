@@ -19,8 +19,8 @@ Software is a first-class use case, but the machinery is domain-agnostic.
 This repo doubles as a Claude Code plugin marketplace (`.claude-plugin/marketplace.json` at the root). Inside Claude Code:
 
 ```text
-/plugin marketplace add open-edge/lessons-learned
-/plugin install lessons-learned@lessons-learned-local
+/plugin marketplace add open-edge-lab/lessons-learned
+/plugin install lessons-learned@lessons-learned-oe
 /reload-plugins
 ```
 
@@ -28,7 +28,7 @@ For local development, clone the repo and point the marketplace at the clone:
 
 ```text
 /plugin marketplace add <path-to-cloned-repo>
-/plugin install lessons-learned@lessons-learned-local
+/plugin install lessons-learned@lessons-learned-oe
 /reload-plugins
 ```
 
