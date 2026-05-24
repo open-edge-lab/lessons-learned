@@ -1,8 +1,8 @@
 # Lessons Learned — Schema
 
 Per-repo schema for the `lessons-learned` plugin development knowledge
-base. Mirrors `.claude-plugin/lessons-learned.config.json` (none present —
-defaults plus the customizations below apply).
+base. Mirrors `lessons-learned.config.json` (none present — defaults plus the
+customizations below apply).
 
 ---
 

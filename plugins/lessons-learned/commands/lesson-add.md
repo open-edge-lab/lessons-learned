@@ -17,10 +17,10 @@ inclusion-criteria check. Use this when:
 
 ## Procedure
 
-1. **Locate the knowledge base.** Resolve via
-   `.claude-plugin/lessons-learned.config.json` → `knowledgeBaseRoot`, default
-   `docs/lessons-learned/`. If it doesn't exist, suggest `/lesson-init` and
-   stop.
+1. **Locate the knowledge base.** Resolve via `lessons-learned.config.json`
+   (or `.claude-plugin/lessons-learned.config.json`) → `knowledgeBaseRoot`,
+   default `docs/lessons-learned/`. If it doesn't exist, suggest `/lesson-init`
+   and stop.
 
 2. **Gather inputs.**
    - If a title was given as command argument, use it as a starting point.

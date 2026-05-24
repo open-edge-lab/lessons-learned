@@ -11,8 +11,8 @@ migrates a legacy flat-file, or skips with a friendly message.
 
 ### Step 1 — Resolve target path
 
-Read `.claude-plugin/lessons-learned.config.json` if present and pick
-`knowledgeBaseRoot`. Otherwise use `docs/lessons-learned/`.
+Read `lessons-learned.config.json` (or `.claude-plugin/lessons-learned.config.json`)
+if present and pick `knowledgeBaseRoot`. Otherwise use `docs/lessons-learned/`.
 
 ### Step 2 — Detect existing state
 
@@ -75,47 +75,26 @@ If `memoryIntegration` is true (default) **or** the user explicitly opts in:
    ```
    (Create `MEMORY.md` if it doesn't exist.)
 
-### Step 5 — CLAUDE.md / AGENTS.md snippet
+### Step 5 — CLAUDE.md snippet
 
-Render `templates/claude-md-snippet.md` substituting `{{KB_PATH}}` with the
-actual knowledge base path. Then handle the snippet integration in this order:
+Prime Claude Code to use the knowledge base by adding a block to `CLAUDE.md`.
 
-1. **Detect target file.** Look at the repo root in this order:
-   - `CLAUDE.md` if present
-   - `AGENTS.md` if present
-   - Neither — fall through to step 4
+1. Render `templates/claude-md-snippet.md`, substituting `{{KB_PATH}}` with the
+   actual knowledge base path.
 
-2. **Check for an existing block.** If the target file already contains a
-   heading `## Lessons learned knowledge base`, the snippet is already
-   installed. Tell the user and skip (idempotent).
+2. **Check for an existing block.** If `CLAUDE.md` already contains a heading
+   `## Lessons learned knowledge base`, the snippet is installed — skip
+   (idempotent).
 
-3. **Propose append (preferred path).** Show the rendered snippet inline,
-   then ask:
+3. **Propose the change.**
+   - If `CLAUDE.md` exists, offer to append the rendered block. Append-only —
+     never overwrite existing content; ensure a blank line separates the new
+     block from what precedes it.
+   - If `CLAUDE.md` does not exist, offer to create it with the block.
+   - Offer "show diff first" and "no, I'll paste it myself" as alternatives.
 
-   > Found `<target>` in the repo root. Want me to append this block to it?
-   >
-   > - **yes** — I append the snippet (preceded by a blank line) at the end
-   >   of the file.
-   > - **show full file diff first** — I print the planned diff before any
-   >   write.
-   > - **no, I'll paste it myself** — I just leave the snippet on screen.
-
-4. **No target file present.** Ask:
-
-   > No `CLAUDE.md` or `AGENTS.md` found at the repo root. Want me to
-   > create one (defaults to `CLAUDE.md`) containing just this snippet?
-   >
-   > - **yes, create `CLAUDE.md`**
-   > - **yes, create `AGENTS.md`**
-   > - **no, leave it to me** — print the snippet on screen and stop.
-
-5. **On accept**, write the change with a single Edit/Write call. Always
-   ensure a blank line separates the new block from preceding content.
-   Confirm with one line: `Appended Lessons learned block to <target>
-   (N lines).`
-
-6. **Never silently overwrite** an existing `CLAUDE.md`/`AGENTS.md`. Append
-   only, or refuse and fall back to manual paste.
+4. **On accept**, write the change with a single Edit/Write call and confirm:
+   `Appended Lessons learned block to CLAUDE.md (N lines).`
 
 ### Step 6 — Idempotency check
 

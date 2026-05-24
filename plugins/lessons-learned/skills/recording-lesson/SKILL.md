@@ -15,8 +15,9 @@ decisions, research. Don't restrict yourself to debugging contexts.
 ## Procedure
 
 1. **Locate the knowledge base.** Same resolution as `consulting-lessons`:
-   read `.claude-plugin/lessons-learned.config.json` for `knowledgeBaseRoot`,
-   else default to `docs/lessons-learned/`. Silent skip if absent.
+   read `lessons-learned.config.json` (or `.claude-plugin/lessons-learned.config.json`)
+   for `knowledgeBaseRoot`, else default to `docs/lessons-learned/`. Silent skip
+   if absent.
 
 2. **Read the schema.** Open `<KB>/schema.md` and any
    `inclusionCriteria` from the config JSON.

@@ -1,22 +1,43 @@
 # lessons-learned
 
-A Claude Code plugin that maintains a **"lessons learned" knowledge base** in any repo, in the style of [Karpathy's LLM Wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f).
+A **"lessons learned" knowledge base** for any repo, in the style of
+[Karpathy's LLM Wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) —
+it captures hard-won problem-solving insights (software bugs, hardware quirks,
+process gotchas, non-obvious decisions, research findings) before they evaporate
+at the end of a session.
 
-It captures hard-won problem-solving insights — software bugs, but also hardware quirks, process gotchas, non-obvious decisions, research findings — before they evaporate at the end of a session.
+The knowledge base is plain markdown under `docs/lessons-learned/`. It is created
+and maintained by a **native plugin** for your AI coding tool:
 
-Claude can:
+| Plugin | Tool | Location |
+|---|---|---|
+| `lessons-learned` | Claude Code | [`plugins/lessons-learned/`](plugins/lessons-learned/) |
+| `lessons-learned-opencode` | opencode | [`plugins/lessons-learned-opencode/`](plugins/lessons-learned-opencode/) |
 
-- **Consult** prior lessons when investigating a new problem (`consulting-lessons` skill).
-- **Record** a new lesson when a non-trivial problem is resolved (`recording-lesson` skill).
-- **Search**, **lint**, and **maintain** the knowledge base via slash commands.
+Both plugins read and write the same on-disk format, so a repo's
+`docs/lessons-learned/` can be used from either tool. Support for additional
+CLIs is added the same way — one native plugin per tool, under `plugins/`.
 
-The plugin is domain-agnostic. Software is a first-class use case, but the same machinery works for any project where non-trivial problem-solving knowledge accumulates.
+---
+
+## What it does
+
+- **Consult** — before investigating a non-trivial problem, surface prior
+  lessons that match the symptoms.
+- **Record** — after a non-trivial resolution (cross-domain, multi-factor, or
+  non-obvious diagnosis), capture it as a new page.
+- **Search & lint** — query the index and health-check the knowledge base.
+
+Software is a first-class use case, but the machinery is domain-agnostic.
 
 ---
 
 ## Install
 
-Inside Claude Code, add this repo as a plugin marketplace and install the plugin:
+### Claude Code
+
+This repo doubles as a Claude Code plugin marketplace
+(`.claude-plugin/marketplace.json` at the root):
 
 ```text
 /plugin marketplace add open-edge-lab/lessons-learned
@@ -24,37 +45,24 @@ Inside Claude Code, add this repo as a plugin marketplace and install the plugin
 /reload-plugins
 ```
 
-If you prefer a local clone (useful for hacking on the plugin), point the marketplace at the clone directory instead:
+Then, in any repo: `/lesson-init`. See
+[`plugins/lessons-learned/README.md`](plugins/lessons-learned/README.md) for
+commands, configuration, and design notes.
 
-```text
-/plugin marketplace add <path-to-cloned-repo>
-/plugin install lessons-learned@lessons-learned-oe
-/reload-plugins
+### opencode
+
+Add the plugin to your `opencode.json`:
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["lessons-learned-opencode"]
+}
 ```
 
-`<path-to-cloned-repo>` is the absolute path to the repo root (the directory that contains `.claude-plugin/`).
-
-Then, in any repo where you want a knowledge base:
-
-```text
-/lesson-init
-```
-
-This bootstraps `docs/lessons-learned/` (or migrates an existing flat-file `docs/LESSONS_LEARNED.md`).
-
----
-
-## Quick start
-
-| You do | Claude does |
-|---|---|
-| Report a problem ("the printer keeps jamming on duplex jobs") | `consulting-lessons` auto-fires, surfaces matching prior lessons before investigating |
-| Finish a non-trivial multi-factor resolution | `recording-lesson` auto-fires, proposes recording it |
-| `/lesson-search <query>` | Returns top-5 matches from the index |
-| `/lesson-add` | Manually record an entry (bypasses inclusion criteria) |
-| `/lesson-lint` | Maintenance pass over the knowledge base |
-
-For full command reference, configuration, and design notes, see the plugin README at [`plugins/lessons-learned/README.md`](plugins/lessons-learned/README.md).
+Then ask the agent to run `lesson-init`. See
+[`plugins/lessons-learned-opencode/README.md`](plugins/lessons-learned-opencode/README.md)
+for details.
 
 ---
 
@@ -63,20 +71,48 @@ For full command reference, configuration, and design notes, see the plugin READ
 ```
 .
 ├── .claude-plugin/
-│   └── marketplace.json          # marketplace manifest (this repo as a marketplace)
+│   └── marketplace.json          # Claude Code marketplace manifest
+├── core/                         # single source of truth (dev only — not shipped)
+│   ├── templates/                # knowledge-base templates: index, log, schema, readme, page
+│   └── config-schema.json        # config JSON schema
+├── scripts/
+│   └── sync-core.mjs             # regenerates each plugin's artifacts from core/
 ├── plugins/
-│   └── lessons-learned/          # the plugin itself
-│       ├── .claude-plugin/plugin.json
-│       ├── commands/             # /lesson-init, /lesson-add, /lesson-search, /lesson-lint
-│       ├── skills/               # consulting-lessons, recording-lesson
-│       ├── hooks/                # pre-commit reminder
-│       ├── templates/            # files produced by /lesson-init
-│       └── README.md             # full plugin documentation
+│   ├── lessons-learned/          # Claude Code native plugin (commands, skills, hooks)
+│   └── lessons-learned-opencode/ # opencode native plugin (TypeScript tools)
 └── docs/
     └── lessons-learned/          # dogfood: this repo's own knowledge base
 ```
 
-The marketplace and the plugin live in **separate roots** on purpose — see [`docs/lessons-learned/pages/2026-05-19-marketplace-plugin-not-in-same-root.md`](docs/lessons-learned/pages/2026-05-19-marketplace-plugin-not-in-same-root.md) for the reason.
+The marketplace manifest and the Claude Code plugin live in **separate roots**
+on purpose — see
+[`docs/lessons-learned/pages/2026-05-19-marketplace-plugin-not-in-same-root.md`](docs/lessons-learned/pages/2026-05-19-marketplace-plugin-not-in-same-root.md).
+
+---
+
+## Configuration
+
+Optional, per repo. Place `lessons-learned.config.json` in the repo root (or
+`.claude-plugin/lessons-learned.config.json` for backward compatibility). Both
+plugins read it. Schema and defaults: [`core/config-schema.json`](core/config-schema.json).
+
+---
+
+## Contributing
+
+The knowledge-base templates and config schema are owned by **`core/`** — the
+single source of truth. Each plugin needs its own copy in a tool-specific form
+(committed markdown files for Claude Code, an inlined TypeScript module for
+opencode), so `scripts/sync-core.mjs` generates them:
+
+```sh
+node scripts/sync-core.mjs           # regenerate plugin artifacts from core/
+node scripts/sync-core.mjs --check   # CI: fail if any artifact is stale
+```
+
+Edit `core/`, never the generated copies, then run the sync script and commit.
+To add a plugin for a new CLI: create `plugins/lessons-learned-<tool>/`, consume
+`core/`, and extend `sync-core.mjs` if the tool needs a new artifact form.
 
 ---
 

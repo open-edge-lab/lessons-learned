@@ -1,6 +1,6 @@
 {
   "name": "lessons-learned",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "Reusable Claude Code plugin to maintain a Karpathy-LLM-Wiki-style knowledge base of problem-solving lessons (software and beyond) in any repo.",
   "author": {
     "name": "Open Edge"

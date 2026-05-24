@@ -17,8 +17,9 @@ optionally reads matched pages.
 ## Procedure
 
 1. **Locate the knowledge base.** Same resolution as the skills:
-   `.claude-plugin/lessons-learned.config.json` → `knowledgeBaseRoot`, default
-   `docs/lessons-learned/`. If absent → suggest `/lesson-init` and stop.
+   `lessons-learned.config.json` (or `.claude-plugin/lessons-learned.config.json`)
+   → `knowledgeBaseRoot`, default `docs/lessons-learned/`. If absent → suggest
+   `/lesson-init` and stop.
 
 2. **Read `<KB>/index.md`.**
 

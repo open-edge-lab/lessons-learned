@@ -16,7 +16,7 @@ hardware, process, decisions, research.
 
 Use the `lessons-learned` plugin's slash commands (`/lesson-search`,
 `/lesson-add`, `/lesson-lint`) or let the auto-activating skills
-`consulting-lessons` and `recording-lesson` handle ingest and query.
+(`consulting-lessons`, `recording-lesson`) handle ingest and query.
 
 When the user reports a problem whose symptoms might span multiple domains or
 factors (software, hardware, process, integration, concurrency, deployment,

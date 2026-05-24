@@ -2,7 +2,7 @@
 
 This repo maintains a lessons-learned knowledge base at `docs/lessons-learned/`,
 managed by the [`lessons-learned`](https://github.com/open-edge-lab/lessons-learned)
-Claude Code plugin. The knowledge base captures problem-solving insights
+plugin. The knowledge base captures problem-solving insights
 across any domain (software, hardware, process, decisions, research) — not
 just debugging.
 

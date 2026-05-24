@@ -16,7 +16,8 @@ project is.
 ## Procedure
 
 1. **Locate the knowledge base.** Resolve the root in this order:
-   - Read `.claude-plugin/lessons-learned.config.json` if present →
+   - Read `lessons-learned.config.json` (or, for backward compatibility,
+     `.claude-plugin/lessons-learned.config.json`) if present →
      `knowledgeBaseRoot` field.
    - Otherwise default to `docs/lessons-learned/`.
 

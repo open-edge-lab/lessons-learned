@@ -1,16 +1,20 @@
-# lessons-learned
+# lessons-learned (Claude Code plugin)
 
 A Claude Code plugin that maintains a **"lessons learned" knowledge base** in any repo, in the style of [Karpathy's LLM Wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f).
 
 It captures hard-won problem-solving insights — software bugs, but also hardware quirks, process gotchas, non-obvious decisions, research findings — before they evaporate at the end of a session.
 
-The plugin lets Claude:
+Claude Code can:
 
 - **Consult** prior lessons when investigating a new problem (`consulting-lessons` skill).
 - **Record** a new lesson when a non-trivial resolution lands (`recording-lesson` skill).
-- **Search**, **lint**, and **maintain** the knowledge base via slash commands.
+- **Search**, **lint**, and **bootstrap** the knowledge base via slash commands.
 
 Software is a first-class use case, but the machinery is domain-agnostic.
+
+> Using a different tool? opencode has its own native plugin —
+> `lessons-learned-opencode`, in this same repo. Both plugins share the
+> knowledge-base format, so a repo's `docs/lessons-learned/` works with either.
 
 ---
 
@@ -32,10 +36,9 @@ For local development, clone the repo and point the marketplace at the clone:
 /reload-plugins
 ```
 
-`<path-to-cloned-repo>` is the absolute path to the directory containing this
-README's parent's parent (i.e. the repo root that holds `.claude-plugin/`).
+`<path-to-cloned-repo>` is the absolute path to the repo root (the directory that holds `.claude-plugin/`).
 
-Then in any repo where you want a knowledge base:
+Then, in any repo where you want a knowledge base:
 
 ```text
 /lesson-init
@@ -47,7 +50,7 @@ This bootstraps `docs/lessons-learned/` (or migrates an existing flat-file `docs
 
 ## Quick start
 
-| You do | Claude does |
+| You do | Claude Code does |
 |---|---|
 | Report a problem ("the printer keeps jamming on duplex jobs") | `consulting-lessons` auto-fires, surfaces matching prior lessons before investigating |
 | Finish a non-trivial multi-factor resolution | `recording-lesson` auto-fires, proposes recording it |
@@ -70,7 +73,7 @@ This bootstraps `docs/lessons-learned/` (or migrates an existing flat-file `docs
 
 ## Configuration
 
-Drop `.claude-plugin/lessons-learned.config.json` in your repo. All fields are optional.
+Optional. Place `lessons-learned.config.json` in your repo root (or `.claude-plugin/lessons-learned.config.json` for backward compatibility). All fields are optional.
 
 ```json
 {
@@ -88,7 +91,7 @@ Drop `.claude-plugin/lessons-learned.config.json` in your repo. All fields are o
 }
 ```
 
-Schema lives at `config-schema.json` at the plugin root.
+Full schema: `config-schema.json` at the plugin root.
 
 ---
 
@@ -98,7 +101,7 @@ The plugin maps [Karpathy's LLM Wiki](https://gist.github.com/karpathy/442a6bf55
 
 **Three layers:**
 - **Wiki** — `pages/*.md`, one lesson per file, owned by the LLM.
-- **Schema** — `schema.md` inside the knowledge base, plus an optional snippet in your `CLAUDE.md`. Defines categories and inclusion criteria for this repo.
+- **Schema** — `schema.md` inside the knowledge base, plus an optional snippet in `CLAUDE.md`. Defines categories and inclusion criteria for this repo.
 - **Raw sources** — *intentionally absent on disk*. For the lessons-learned domain, raw sources are the transient session itself (conversation, diff, log excerpts, notes) rather than curated persistent documents. This is a deliberate adaptation of the Karpathy pattern to a session-driven domain.
 
 **Three operations:**
@@ -134,7 +137,15 @@ docs/lessons-learned/
 ## Limitations
 
 - **Hook portability** — the `pre-commit-reminder` hook uses a bash + `jq` + `git` snippet. On Windows you need Git Bash in `PATH`. A PowerShell-native fallback is not yet shipped.
-- **English only** — templates are English. Multi-language is out of scope for v0.1.x.
+- **English only** — templates are English. Multi-language is out of scope for v0.x.
 - **No database/search backend** — everything is markdown + grep + Read. Scales fine into the low hundreds of pages.
 - **`--deep` lint is LLM-cost-sensitive** — it compares pages pairwise. Cache and gate behind explicit flag.
 
+---
+
+## Note for contributors
+
+The knowledge-base templates and config schema in `templates/` and
+`config-schema.json` are **generated** from `core/` at the repo root by
+`scripts/sync-core.mjs`. Edit `core/`, not the copies here, then run the sync
+script. See the repo root README.
