@@ -1,0 +1,4 @@
+interface:
+  display_name: "Consulting Lessons"
+  short_description: "Surface prior lessons before investigating"
+  default_prompt: "Use $consulting-lessons to check whether this problem has already been solved in the lessons-learned knowledge base."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Lesson Add"
+  short_description: "Manually record a lesson, bypassing criteria"
+  default_prompt: "Use $lesson-add to file this as a lesson in the knowledge base."

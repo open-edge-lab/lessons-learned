@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/lessons-learned.config.schema.json",
+  "title": "lessons-learned plugin configuration",
+  "description": "Per-repo configuration for the lessons-learned plugins. Place this file at lessons-learned.config.json in your repo root (or .claude-plugin/lessons-learned.config.json for backward compatibility). All fields are optional; missing fields fall back to plugin defaults.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "knowledgeBaseRoot": {
+      "type": "string",
+      "description": "Path (relative to repo root) where the knowledge base lives.",
+      "default": "docs/lessons-learned"
+    },
+    "language": {
+      "type": "string",
+      "enum": ["en"],
+      "description": "Template language. Only English is supported in v0.x.",
+      "default": "en"
+    },
+    "categories": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Allowed top-level categories used to group entries in index.md. Defaults are domain-agnostic; override per repo as needed.",
+      "default": [
+        "software",
+        "hardware",
+        "process",
+        "decision",
+        "research",
+        "other"
+      ]
+    },
+    "inclusionCriteria": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Thresholds the recording flow applies before proposing a new entry.",
+      "properties": {
+        "minDomains": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 2,
+          "description": "Minimum number of distinct domains/layers the problem spans (e.g., software + hardware, technical + organizational, code + config) to qualify."
+        },
+        "minFactors": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 2,
+          "description": "Minimum number of distinct components, factors, or causes involved in the problem or its resolution."
+        },
+        "requireNonObviousDiagnosis": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, the resolution must have required non-trivial diagnosis (the cause was not visible from the immediate symptoms)."
+        }
+      }
+    },
+    "preCommitHook": {
+      "type": "boolean",
+      "default": true,
+      "description": "Enable the non-blocking pre-commit reminder hook (Claude Code plugin only)."
+    },
+    "memoryIntegration": {
+      "type": "boolean",
+      "default": true,
+      "description": "If true, the Claude Code plugin offers to write a memory entry pointing at the knowledge base."
+    },
+    "autoCrossReference": {
+      "type": "boolean",
+      "default": true,
+      "description": "If true, the recording flow scans the index for related entries and proposes bidirectional `related:` links."
+    }
+  }
+}

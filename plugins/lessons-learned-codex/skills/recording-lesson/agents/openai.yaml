@@ -1,0 +1,4 @@
+interface:
+  display_name: "Recording Lesson"
+  short_description: "Capture a non-trivial resolution as a lesson"
+  default_prompt: "Use $recording-lesson to file this resolution into the lessons-learned knowledge base."

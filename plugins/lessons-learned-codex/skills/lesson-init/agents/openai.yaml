@@ -1,0 +1,4 @@
+interface:
+  display_name: "Lesson Init"
+  short_description: "Bootstrap the lessons-learned knowledge base"
+  default_prompt: "Use $lesson-init to set up the lessons-learned knowledge base in this repo."

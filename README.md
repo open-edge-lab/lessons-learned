@@ -13,10 +13,12 @@ and maintained by a **native plugin** for your AI coding tool:
 |---|---|---|
 | `lessons-learned` | Claude Code | [`plugins/lessons-learned/`](plugins/lessons-learned/) |
 | `lessons-learned-opencode` | opencode | [`plugins/lessons-learned-opencode/`](plugins/lessons-learned-opencode/) |
+| `lessons-learned-codex` | OpenAI Codex CLI | [`plugins/lessons-learned-codex/`](plugins/lessons-learned-codex/) |
 
-Both plugins read and write the same on-disk format, so a repo's
-`docs/lessons-learned/` can be used from either tool. Support for additional
-CLIs is added the same way — one native plugin per tool, under `plugins/`.
+All three plugins read and write the same on-disk format, so a repo's
+`docs/lessons-learned/` can be used from any of the supported tools. Support
+for additional CLIs is added the same way — one native plugin per tool,
+under `plugins/`.
 
 ---
 
@@ -64,6 +66,25 @@ Then ask the agent to run `lesson-init`. See
 [`plugins/lessons-learned-opencode/README.md`](plugins/lessons-learned-opencode/README.md)
 for details.
 
+### OpenAI Codex CLI
+
+Codex CLI 0.114+ loads skills from `~/.codex/skills/<name>/`. Clone the
+repo, run the sync (one-time, idempotent), then install the six skills:
+
+```sh
+git clone https://github.com/open-edge-lab/lessons-learned
+cd lessons-learned
+node scripts/sync-core.mjs
+plugins/lessons-learned-codex/install.sh          # macOS / Linux
+plugins/lessons-learned-codex/install.ps1         # Windows PowerShell
+```
+
+Restart any open `codex` session, then in any repo: `codex` →
+`$lesson-init`. (Codex's `$consulting-lessons` and `$recording-lesson`
+auto-fire on their own when the conversation matches.) See
+[`plugins/lessons-learned-codex/README.md`](plugins/lessons-learned-codex/README.md)
+for details.
+
 ---
 
 ## Repo layout
@@ -79,7 +100,8 @@ for details.
 │   └── sync-core.mjs             # regenerates each plugin's artifacts from core/
 ├── plugins/
 │   ├── lessons-learned/          # Claude Code native plugin (commands, skills, hooks)
-│   └── lessons-learned-opencode/ # opencode native plugin (TypeScript tools)
+│   ├── lessons-learned-opencode/ # opencode native plugin (TypeScript tools)
+│   └── lessons-learned-codex/    # OpenAI Codex CLI native plugin (skills)
 └── docs/
     └── lessons-learned/          # dogfood: this repo's own knowledge base
 ```

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Lesson Search"
+  short_description: "Search prior lessons by symptom, category, or tag"
+  default_prompt: "Use $lesson-search to find prior lessons matching these symptoms."

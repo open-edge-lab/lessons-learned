@@ -1,0 +1,4 @@
+interface:
+  display_name: "Lesson Lint"
+  short_description: "Health-check the knowledge base"
+  default_prompt: "Use $lesson-lint to check the lessons-learned knowledge base for broken refs and stale entries."

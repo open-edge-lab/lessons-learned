@@ -22,6 +22,7 @@ const check = process.argv.includes("--check")
 const coreTemplatesDir = join(repoRoot, "core", "templates")
 const ccPluginDir = join(repoRoot, "plugins", "lessons-learned")
 const ocGeneratedDir = join(repoRoot, "plugins", "lessons-learned-opencode", "src", "generated")
+const codexPluginDir = join(repoRoot, "plugins", "lessons-learned-codex")
 
 /** Normalize to LF so CRLF checkouts don't produce false drift. */
 const norm = (s) => s.replace(/\r\n/g, "\n")
@@ -66,6 +67,41 @@ for (const [constName, file] of Object.entries(ocTemplates)) {
   ts += `export const ${constName} = \`${body}\`\n\n`
 }
 outputs.push({ path: join(ocGeneratedDir, "templates.ts"), content: ts })
+
+// 4. Codex plugin: verbatim config-schema copy at the plugin root (for
+//    docs / per-repo reference). Each skill folder is self-contained, so
+//    template copies go inside each skill's references/ dir below.
+outputs.push({
+  path: join(codexPluginDir, "config-schema.json"),
+  content: readCore("config-schema.json"),
+})
+
+// 5. Codex plugin: copy core/templates/*.md into the references/ folder
+//    of each skill that needs them. Codex skills are self-contained
+//    directories under ~/.codex/skills/<name>/; the install script
+//    symlinks the whole skill folder, so the templates ride along.
+//
+//    File naming: <base>-template.md (e.g. page-template.md) — matches
+//    the references SKILL.md instructs the agent to read.
+//
+//    Skills that need templates:
+//      lesson-init      → all 5 (it bootstraps the whole KB / migration)
+//      lesson-add       → page (it writes new pages)
+//      recording-lesson → page (it writes new pages)
+const codexSkillTemplates = {
+  "lesson-init": ["index.md", "log.md", "schema.md", "readme.md", "page.md"],
+  "lesson-add": ["page.md"],
+  "recording-lesson": ["page.md"],
+}
+for (const [skill, files] of Object.entries(codexSkillTemplates)) {
+  for (const file of files) {
+    const baseName = file.replace(/\.md$/, "")
+    outputs.push({
+      path: join(codexPluginDir, "skills", skill, "references", `${baseName}-template.md`),
+      content: readCore(join("templates", file)),
+    })
+  }
+}
 
 // Apply (write) or check (compare).
 let drift = 0
